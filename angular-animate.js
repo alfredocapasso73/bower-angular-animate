@@ -1321,7 +1321,12 @@ var $AnimateCssProvider = ['$animateProvider', /** @this */ function($animatePro
 
         /* Firefox (or possibly just Gecko) likes to not round values up
          * when a ms measurement is used for the animation */
-        var elapsedTime = parseFloat(ev.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES));
+        /*
+        Changing declaration to avoid IE bug with "unknown propertytoFixed".
+        Has already be done for newer version of angular, see here:
+        https://github.com/angular/angular.js/pull/15405/commits/1dd33120cdd2d66d24d04681f473d010bf717594
+        */
+        var elapsedTime = ev && ev.elapsedTime ? parseFloat(ev.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES)) : maxDuration;    
 
         /* $manualTimeStamp is a mocked timeStamp value which is set
          * within browserTrigger(). This is only here so that tests can
